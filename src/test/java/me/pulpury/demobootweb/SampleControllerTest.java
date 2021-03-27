@@ -32,6 +32,7 @@ public class SampleControllerTest {
 //	}
 	
 	// test Commit
+	// test two
 	
 	@Test
 	public void hello() throws Exception {
