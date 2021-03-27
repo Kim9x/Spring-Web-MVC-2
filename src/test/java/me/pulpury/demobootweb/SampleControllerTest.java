@@ -31,6 +31,8 @@ public class SampleControllerTest {
 //		return new PersonFormatter();
 //	}
 	
+	// test Commit
+	
 	@Test
 	public void hello() throws Exception {
 		Person person = new Person();
