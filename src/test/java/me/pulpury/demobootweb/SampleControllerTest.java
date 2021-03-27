@@ -60,5 +60,17 @@ public class SampleControllerTest {
 					.andExpect(content().string(Matchers.containsString("Hello Mobile TEST")))
 					.andExpect(header().exists(HttpHeaders.CACHE_CONTROL));
 	}
+	
+	@Test
+	public void StringMessage() throws Exception {
+		
+		this.mockMvc.perform(get("/message")
+					.content("hello"))
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andExpect(content().string("hello"));
+	}
+	
+	
 
 }

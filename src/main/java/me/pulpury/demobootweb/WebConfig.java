@@ -1,10 +1,12 @@
 package me.pulpury.demobootweb;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -33,6 +35,21 @@ public class WebConfig implements WebMvcConfigurer {
 				.addResourceLocations("classpath:/test/")
 				.setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
 	}
+	
+	// configureMessageConverters 추가 시 default Converter들이 사용 안됨.
+//	@Override
+//	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//		
+//	}
+	
+	// extendMessageConverter 사용 시에는 Default Converter 사용 가능.
+	// Converter 등록에 추천하는 방식은 '의존성 추가'.
+	@Override
+	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+		// TODO Auto-generated method stub
+		WebMvcConfigurer.super.extendMessageConverters(converters);
+	}
+	
 
 //	@Override
 //	public void addFormatters(FormatterRegistry registry) {
