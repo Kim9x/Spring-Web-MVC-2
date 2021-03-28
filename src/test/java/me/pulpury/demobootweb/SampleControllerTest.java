@@ -1,10 +1,18 @@
 package me.pulpury.demobootweb;
 
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.xpath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.io.StringWriter;
+
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -16,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,6 +50,9 @@ public class SampleControllerTest {
 	// json형으로 변환해주기 위해 사
 	@Autowired
 	ObjectMapper objectMapper;
+	
+	@Autowired
+	Marshaller marshaller;
 	
 	// test Commit
 	// test two
@@ -84,15 +96,23 @@ public class SampleControllerTest {
 		person.setId(2019l);
 		person.setName("taeju");
 		
+		StringWriter stringWriter = new StringWriter();
+		Result result = new StreamResult(stringWriter);
+		marshaller.marshal(person, result);
+		String xmlString = stringWriter.toString();
+		
 		// Person 타입의 값을 json형으로 변환!
-		String jsonString = objectMapper.writeValueAsString(person);
+//		String jsonString = objectMapper.writeValueAsString(person);
 		
 		this.mockMvc.perform(get("/jsonMessage")
-					.contentType(MediaType.APPLICATION_JSON_UTF8)
-					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.content(jsonString))
+					.contentType(MediaType.APPLICATION_XML)
+					.accept(MediaType.APPLICATION_XML)
+					.content(xmlString))
 				.andDo(print())
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
+				.andExpect((ResultMatcher) xpath("person/name").string("2019"))
+				.andExpect((ResultMatcher) xpath("person/name").string("taeju"))
+				
 	}
 
 }

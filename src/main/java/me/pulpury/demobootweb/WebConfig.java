@@ -3,16 +3,23 @@ package me.pulpury.demobootweb;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+	
+	@Bean 
+	public Jaxb2Marshaller marshaller() { 
+	Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller(); 
+	jaxb2Marshaller.setPackagesToScan(Person.class.getPackageName()); 
+	return jaxb2Marshaller; 
+	}
+
 
 //	@Override
 //	public void addInterceptors(InterceptorRegistry registry) {
